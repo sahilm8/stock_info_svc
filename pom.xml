@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.sahil</groupId>
 	<artifactId>stock.info</artifactId>
-	<version>1.0.2</version>
+	<version>0.1.0</version>
 	<name>stock_info_svc</name>
 	<description>
 		Microservice to fetch and record stock data.
