@@ -16,39 +16,39 @@ public class StockService {
     @Autowired
     private StockRepository stockRepository;
 
-    public Stock createStock(String name) {
-        if (stockRepository.findByName(name).isEmpty()) {
+    public Stock createStock(String symbol) {
+        if (stockRepository.findBySymbol(symbol).isEmpty()) {
             Stock stock = new Stock();
             // Set other details.
-            stock.setName(name);
+            stock.setSymbol(symbol);
             stockRepository.save(stock);
             log.info("Stock created: " + stock.toString());
             return stock; 
         }
-        Stock stock = stockRepository.findByName(name).get();
+        Stock stock = stockRepository.findBySymbol(symbol).get();
         log.info("Stock already exists: " + stock.toString());
         // Update it.
         return null;
     }
 
-    public Stock getStock(String name) {
-        if (stockRepository.findByName(name).isPresent()) {
-            Stock stock = stockRepository.findByName(name).get();
+    public Stock getStock(String symbol) {
+        if (stockRepository.findBySymbol(symbol).isPresent()) {
+            Stock stock = stockRepository.findBySymbol(symbol).get();
             log.info("Stock found: " + stock.toString());
             return stock;
         }
-        log.info("Stock not found: " + name);
+        log.info("Stock not found: " + symbol);
         return null;
     }
 
-    public boolean deleteStock(String name) {
-        if (stockRepository.findByName(name).isPresent()) {
-            Stock stock = stockRepository.findByName(name).get();
+    public boolean deleteStock(String symbol) {
+        if (stockRepository.findBySymbol(symbol).isPresent()) {
+            Stock stock = stockRepository.findBySymbol(symbol).get();
             stockRepository.delete(stock);
-            log.info("Stock deleted: " + name);
+            log.info("Stock deleted: " + symbol);
             return true;
         }
-        log.info("Stock not found: " + name);
+        log.info("Stock not found: " + symbol);
         return false;
     }
 }
