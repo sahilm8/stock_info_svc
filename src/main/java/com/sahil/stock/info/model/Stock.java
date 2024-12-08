@@ -23,16 +23,10 @@ public class Stock {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
     private String symbol;
 
     @Column(nullable = false)
-    private String currency;
-
-    @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal open;
 
     @Column(nullable = false)
     private BigDecimal high;
@@ -41,7 +35,19 @@ public class Stock {
     private BigDecimal low;
 
     @Column(nullable = false)
+    private BigDecimal price;
+
+    @Column(nullable = false)
     private BigDecimal volume;
+
+    @Column(nullable = false)
+    private BigDecimal prevClose;
+
+    @Column(nullable = false)
+    private BigDecimal change;
+
+    @Column(nullable = false)
+    private int changePercent;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
