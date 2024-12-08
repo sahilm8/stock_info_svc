@@ -1,5 +1,6 @@
 package com.sahil.stock.info.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -14,9 +15,9 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "Model")
+@Table(name = "Stock")
 @Data
-public class Model {
+public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +25,16 @@ public class Model {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String symbol;
+
+    @Column(nullable = false)
+    private String currency;
+
+    @Column(nullable = false)
+    private BigDecimal price;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private Date createdAt;
+    private Date fetchedAt;
 }
