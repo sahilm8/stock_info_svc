@@ -27,7 +27,7 @@ public class StockController {
     public String home() {
         log.info("Received request to GET /home.");
         return String.format(
-                "Stock Info Service Template%n%n" +
+                "Stock Info Service%n%n" +
                         "Welcome to the stock endpoint, you can make the following requests:%n" +
                         "- POST /new-stock%n" +
                         "- GET /get-stock%n" +
