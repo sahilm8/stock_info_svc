@@ -34,6 +34,15 @@ public class Stock {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Column(nullable = false)
+    private BigDecimal high;
+
+    @Column(nullable = false)
+    private BigDecimal low;
+
+    @Column(nullable = false)
+    private BigDecimal volume;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Date fetchedAt;
