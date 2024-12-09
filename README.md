@@ -14,13 +14,10 @@ Microservice to fetch and record stock data.
 - Maven
 - Spring Boot
 - Spring Web
-- Spring Data JPA
-- MySQL Connector
-- Docker
+- Spring Webflux
 - Spring Dotenv
 - Lombok
 - Spring Test
-- H2 Database
 
 ## Endpoints
 
@@ -44,23 +41,7 @@ curl -i -X DELETE -H "Content-Type: application/json" -d "Model Name" http://loc
 ```
 ./mvnw clean install
 ```
-- Pull Docker MySQL image for running database server:
-```
-docker pull mysql:latest
-```
-- Create an external volume for storing MySQL data:
-```
-docker volume create mysql_volume
-```
-- Run the container:
-```
-docker compose up -d
-```
 - Start the application:
 ```
 ./mvnw spring-boot:run
-```
-- Stop the container:
-```
-docker compose down
 ```
