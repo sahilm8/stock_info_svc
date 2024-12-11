@@ -105,7 +105,7 @@ public class StockService {
     public Mono<TimeSeries> getTimeSeriesDaily(String symbol) {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
-            .queryParam("function", ApiFunctions.TIME_SERIES_INTRADAY.getValue())
+            .queryParam("function", ApiFunctions.TIME_SERIES_DAILY.getValue())
             .queryParam("symbol", symbol)
             .queryParam("outputsize", "full")
             .queryParam("datatype", "json")
