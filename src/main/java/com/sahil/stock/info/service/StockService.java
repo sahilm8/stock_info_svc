@@ -16,6 +16,7 @@ import com.sahil.stock.info.util.ApiFunctions;
 import jakarta.annotation.PostConstruct;
 
 import com.sahil.stock.info.dto.GlobalQuoteDto;
+import com.sahil.stock.info.dto.TsDailyDto;
 import com.sahil.stock.info.dto.TsIntraday15MinDto;
 import com.sahil.stock.info.dto.TsIntraday1MinDto;
 import com.sahil.stock.info.dto.TsIntraday30MinDto;
@@ -77,7 +78,7 @@ public class StockService {
             .queryParam("interval", interval)
             .queryParam("adjusted", false)
             .queryParam("extended_hours", true)
-            .queryParam("outputsize", "compact")
+            .queryParam("outputsize", "full")
             .queryParam("datatype", "json")
             .queryParam("apikey", apiKey)
             .build())
@@ -94,6 +95,39 @@ public class StockService {
                     stockTs.setLow(new BigDecimal(entry.getValue().get(dto.getLow(entry.getKey()))));
                     stockTs.setClose(new BigDecimal(entry.getValue().get(dto.getClose(entry.getKey()))));
                     stockTs.setVolume(new BigDecimal(entry.getValue().get(dto.getVolume(entry.getKey()))));
+                    ts.put(entry.getKey(), stockTs);
+                }
+                timeSeries.setTimeSeries(ts);
+                return timeSeries;
+            });
+    }
+
+    public Mono<TimeSeries> getTimeSeriesDaily(String symbol) {
+        return webClient.get()
+            .uri(uriBuilder -> uriBuilder
+            .queryParam("function", ApiFunctions.TIME_SERIES_INTRADAY.getValue())
+            .queryParam("symbol", symbol)
+            .queryParam("outputsize", "full")
+            .queryParam("datatype", "json")
+            .queryParam("apikey", apiKey)
+            .build())
+            .retrieve()
+            .bodyToMono(TsDailyDto.class)
+            .map(dto -> {
+                log.info("dto: " + dto);
+                TimeSeries timeSeries = new TimeSeries();
+                Map<String, StockTs> ts = new HashMap<>();
+                for (Map.Entry<String, Map<String, String>> entry : dto.getTimeSeries().entrySet()) {
+                    StockTs stockTs = new StockTs();
+                    log.info("key: " + entry.getKey());
+                    log.info("value: " + entry.getValue());
+                    /*
+                    stockTs.setOpen(new BigDecimal(entry.getValue().get(dto.getOpen(entry.getKey()))));
+                    stockTs.setHigh(new BigDecimal(entry.getValue().get(dto.getHigh(entry.getKey()))));
+                    stockTs.setLow(new BigDecimal(entry.getValue().get(dto.getLow(entry.getKey()))));
+                    stockTs.setClose(new BigDecimal(entry.getValue().get(dto.getClose(entry.getKey()))));
+                    stockTs.setVolume(new BigDecimal(entry.getValue().get(dto.getVolume(entry.getKey()))));
+                    */
                     ts.put(entry.getKey(), stockTs);
                 }
                 timeSeries.setTimeSeries(ts);
