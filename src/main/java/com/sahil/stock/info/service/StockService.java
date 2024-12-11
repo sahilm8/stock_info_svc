@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.sahil.stock.info.model.Stock;
+import com.sahil.stock.info.util.ApiFunctions;
+
+import jakarta.annotation.PostConstruct;
+
 import com.sahil.stock.info.dto.GlobalQuoteDto;
 
 
@@ -18,12 +22,25 @@ import reactor.core.publisher.Mono;
 public class StockService {
     @Value("${stock.api_url}")
     private String apiUrl;
+
+    @Value("${stock.api_key}")
+    private String apiKey;
     
-    private WebClient webClient = WebClient.builder().baseUrl("https://www.alphavantage.co/query").build();
+    private WebClient webClient;
+
+    @PostConstruct
+    public void init() {
+        webClient = WebClient.builder().baseUrl(apiUrl).build();
+	}
 
     public Mono<Stock> getGlobalQuote(String symbol) {
         return webClient.get()
-            .uri("?apikey=Q4JWW7S4SWVHSWDS&function=GLOBAL_QUOTE&datatype=json&symbol=" + symbol)
+            .uri(uriBuilder -> uriBuilder
+            .queryParam("apiKey", apiKey)
+            .queryParam("function", ApiFunctions.GLOBAL_QUOTE.getValue())
+            .queryParam("datatype", "json")
+            .queryParam("symbol", "aapl")
+            .build())                
             .retrieve()
             .bodyToMono(GlobalQuoteDto.class)
             .map(dto -> {
