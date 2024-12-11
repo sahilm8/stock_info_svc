@@ -9,3 +9,4 @@ logging:
 
 stock:
   api_url: ${STOCK_API_URL}
+  api_key: ${STOCK_API_KEY}
