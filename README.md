@@ -6,7 +6,7 @@
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Microservice to fetch and record stock data.
+Microservice to fetch and forward stock data.
 
 ## Stack
 
