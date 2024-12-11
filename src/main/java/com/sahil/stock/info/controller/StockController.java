@@ -5,11 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sahil.stock.info.model.Stock;
+import com.sahil.stock.info.model.TimeSeries;
 import com.sahil.stock.info.service.StockService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +37,16 @@ public class StockController {
     }
 
     @GetMapping(value = "/get-global-quote", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<Stock>> getGlobalQuote(@RequestBody String symbol) {
+    public Mono<ResponseEntity<Stock>> getGlobalQuote(@RequestParam String symbol) {
         log.info("Received request to GET /get-global-quote with argument: " + symbol.trim());
         return stockService.getGlobalQuote(symbol.trim()).map(ResponseEntity::ok)
+        .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @GetMapping(value = "/get-intraday", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<TimeSeries>> getIntraday(@RequestParam String symbol, @RequestParam String interval) {
+        log.info("Received request to GET /get-intraday with argument: " + symbol.trim() + ", " + interval.trim());
+        return stockService.getTimeSeriesIntraday(symbol.trim(), interval.trim()).map(ResponseEntity::ok)
         .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
