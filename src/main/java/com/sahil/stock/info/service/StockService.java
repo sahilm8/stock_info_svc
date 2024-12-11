@@ -36,10 +36,10 @@ public class StockService {
     public Mono<Stock> getGlobalQuote(String symbol) {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
-            .queryParam("apiKey", apiKey)
+            .queryParam("apikey", apiKey)
             .queryParam("function", ApiFunctions.GLOBAL_QUOTE.getValue())
             .queryParam("datatype", "json")
-            .queryParam("symbol", "aapl")
+            .queryParam("symbol", symbol)
             .build())                
             .retrieve()
             .bodyToMono(GlobalQuoteDto.class)
