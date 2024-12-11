@@ -22,7 +22,7 @@ Microservice to fetch and record stock data.
 
 ## Endpoints
 
-Instances can be created, fetched, or deleted for the following model classes.
+Requests can be made for the following resources.
 
 ### Resources
 
