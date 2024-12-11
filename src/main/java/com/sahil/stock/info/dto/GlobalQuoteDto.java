@@ -1,6 +1,7 @@
 package com.sahil.stock.info.dto;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,41 +28,51 @@ public class GlobalQuoteDto {
     */
 
     @JsonProperty("Global Quote")
-    public Map<String, String> globalQuote;
+    private Map<String, String> globalQuote = new HashMap<>();
 
     public String getSymbol() {
         return globalQuote.get("01. symbol");
     }
 
     public BigDecimal getOpen() {
-        return new BigDecimal(globalQuote.get("02. open"));
+        String value = globalQuote.get("02. open");
+        return value != null ? new BigDecimal(value) : BigDecimal.ZERO;
     }
 
     public BigDecimal getHigh() {
-        return new BigDecimal(globalQuote.get("03. high"));
+        String value = globalQuote.get("03. high");
+        return value != null ? new BigDecimal(value) : BigDecimal.ZERO;
     }
 
     public BigDecimal getLow() {
-        return new BigDecimal(globalQuote.get("04. low"));
+        String value = globalQuote.get("04. low");
+        return value != null ? new BigDecimal(value) : BigDecimal.ZERO;
     }
 
     public BigDecimal getPrice() {
-        return new BigDecimal(globalQuote.get("05. price"));
+        String value = globalQuote.get("05. price");
+        return value != null ? new BigDecimal(value) : BigDecimal.ZERO;
     }
 
     public BigDecimal getVolume() {
-        return new BigDecimal(globalQuote.get("06. volume"));
+        String value = globalQuote.get("06. volume");
+        return value != null ? new BigDecimal(value) : BigDecimal.ZERO;
     }
 
     public BigDecimal getPrevClose() {
-        return new BigDecimal(globalQuote.get("08. previous close"));
+
+        String value = globalQuote.get("08. previous close");
+        return value != null ? new BigDecimal(value) : BigDecimal.ZERO;
     }
 
     public BigDecimal getChange() {
-        return new BigDecimal(globalQuote.get("09. change"));
+
+        String value = globalQuote.get("09. change");
+        return value != null ? new BigDecimal(value) : BigDecimal.ZERO;
     }
 
     public BigDecimal getChangePercent() {
-        return new BigDecimal(globalQuote.get("10. change percent").replace("%", ""));
+        String value = globalQuote.get("10. change percent");
+        return value != null ? new BigDecimal(value.replace("%", "")) : BigDecimal.ZERO;
     }
 }
