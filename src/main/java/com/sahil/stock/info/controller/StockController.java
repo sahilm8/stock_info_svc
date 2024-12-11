@@ -13,6 +13,7 @@ import com.sahil.stock.info.model.Stock;
 import com.sahil.stock.info.service.StockService;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("api/v1/stock")
@@ -23,7 +24,7 @@ public class StockController {
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public String home() {
-        log.info("Received request to GET /home.");
+        log.info("Received request to GET /.");
         return String.format(
                 "Stock Info Service%n%n" +
                         "Welcome to the stock endpoint, you can make the following requests:%n" +
@@ -35,12 +36,9 @@ public class StockController {
     }
 
     @GetMapping(value = "/get-global-quote", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Stock> getGlobalQuote(@RequestBody String symbol) {
+    public Mono<ResponseEntity<Stock>> getGlobalQuote(@RequestBody String symbol) {
         log.info("Received request to GET /get-global-quote with argument: " + symbol.trim());
-        Stock stock = stockService.getGlobalQuote(symbol.trim());
-        if (stock != null) {
-            return ResponseEntity.ok(stock);            
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return stockService.getGlobalQuote(symbol.trim()).map(ResponseEntity::ok)
+        .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
