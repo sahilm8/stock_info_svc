@@ -1,7 +1,5 @@
 package com.sahil.stock.info.service;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -40,7 +38,7 @@ public class StockService {
             .queryParam("function", ApiFunctions.GLOBAL_QUOTE.getValue())
             .queryParam("datatype", "json")
             .queryParam("symbol", symbol)
-            .build())                
+            .build())  
             .retrieve()
             .bodyToMono(GlobalQuoteDto.class)
             .map(dto -> {
@@ -51,10 +49,10 @@ public class StockService {
                 stock.setLow(dto.getLow());
                 stock.setPrice(dto.getPrice());
                 stock.setVolume(dto.getVolume());
+                stock.setLatestTradingDay(dto.getLatestTradingDay());
                 stock.setPrevClose(dto.getPrevClose());
                 stock.setChange(dto.getChange());
                 stock.setChangePercent(dto.getChangePercent());
-                stock.setFetchedAt(new Date());
                 return stock;
             });
     }
