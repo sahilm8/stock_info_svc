@@ -53,6 +53,7 @@ public class StockService {
             .retrieve()
             .bodyToMono(GlobalQuoteDto.class)
             .map(dto -> {
+                log.info("dto: " + dto);
                 Stock stock = new Stock();
                 stock.setSymbol(dto.getSymbol());
                 stock.setOpen(dto.getOpen());
@@ -83,6 +84,7 @@ public class StockService {
             .retrieve()
             .bodyToMono(getIntervalDtoClass(interval))
             .map(dto -> {
+                log.info("dto: " + dto);
                 TimeSeries timeSeries = new TimeSeries();
                 Map<String, StockTs> ts = new HashMap<>();
                 for (Map.Entry<String, Map<String, String>> entry : dto.getTimeSeries().entrySet()) {
