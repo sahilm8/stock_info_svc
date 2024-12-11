@@ -1,6 +1,7 @@
 package com.sahil.stock.info.dto;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,7 +10,7 @@ import lombok.Data;
 @Data
 public class GlobalQuoteDto {
     /*
-     {
+    {
         "Global Quote": {
         "01. symbol": "IBM",
         "02. open": "234.4300",
@@ -24,33 +25,43 @@ public class GlobalQuoteDto {
         }
     }
     */
-    @JsonProperty("01. symbol")
-    private String symbol;
 
-    @JsonProperty("02. open")
-    private BigDecimal open;
+    @JsonProperty("Global Quote")
+    public Map<String, String> globalQuote;
 
-    @JsonProperty("03. high")
-    private BigDecimal high;
+    public String getSymbol() {
+        return globalQuote.get("01. symbol");
+    }
 
-    @JsonProperty("04. low")
-    private BigDecimal low;
+    public BigDecimal getOpen() {
+        return new BigDecimal(globalQuote.get("02. open"));
+    }
 
-    @JsonProperty("05. price")
-    private BigDecimal price;
+    public BigDecimal getHigh() {
+        return new BigDecimal(globalQuote.get("03. high"));
+    }
 
-    @JsonProperty("06. volume")
-    private BigDecimal volume;
+    public BigDecimal getLow() {
+        return new BigDecimal(globalQuote.get("04. low"));
+    }
 
-    @JsonProperty("07. latest trading day")
-    private String latestTradingDay;
+    public BigDecimal getPrice() {
+        return new BigDecimal(globalQuote.get("05. price"));
+    }
 
-    @JsonProperty("08. previous close")
-    private BigDecimal prevClose;
+    public BigDecimal getVolume() {
+        return new BigDecimal(globalQuote.get("06. volume"));
+    }
 
-    @JsonProperty("09. change")
-    private BigDecimal change;
+    public BigDecimal getPrevClose() {
+        return new BigDecimal(globalQuote.get("08. previous close"));
+    }
 
-    @JsonProperty("10. change percent")
-    private int changePercent;
+    public BigDecimal getChange() {
+        return new BigDecimal(globalQuote.get("09. change"));
+    }
+
+    public BigDecimal getChangePercent() {
+        return new BigDecimal(globalQuote.get("10. change percent").replace("%", ""));
+    }
 }

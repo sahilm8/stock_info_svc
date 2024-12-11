@@ -15,6 +15,6 @@ public class Stock {
     private BigDecimal volume;
     private BigDecimal prevClose;
     private BigDecimal change;
-    private int changePercent;
+    private BigDecimal changePercent;
     private Date fetchedAt;
 }
