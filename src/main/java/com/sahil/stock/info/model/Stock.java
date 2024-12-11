@@ -1,7 +1,6 @@
 package com.sahil.stock.info.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import lombok.Data;
 
@@ -13,8 +12,8 @@ public class Stock {
     private BigDecimal low;
     private BigDecimal price;
     private BigDecimal volume;
+    private String latestTradingDay;
     private BigDecimal prevClose;
     private BigDecimal change;
     private BigDecimal changePercent;
-    private Date fetchedAt;
 }

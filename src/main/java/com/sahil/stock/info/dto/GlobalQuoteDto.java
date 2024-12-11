@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 public class GlobalQuoteDto {
     /*
+    API Response:
     {
         "Global Quote": {
         "01. symbol": "IBM",
@@ -59,14 +60,16 @@ public class GlobalQuoteDto {
         return value != null ? new BigDecimal(value) : BigDecimal.ZERO;
     }
 
-    public BigDecimal getPrevClose() {
+    public String getLatestTradingDay() {
+        return globalQuote.get("07. latest trading day");
+    }
 
+    public BigDecimal getPrevClose() {
         String value = globalQuote.get("08. previous close");
         return value != null ? new BigDecimal(value) : BigDecimal.ZERO;
     }
 
     public BigDecimal getChange() {
-
         String value = globalQuote.get("09. change");
         return value != null ? new BigDecimal(value) : BigDecimal.ZERO;
     }
