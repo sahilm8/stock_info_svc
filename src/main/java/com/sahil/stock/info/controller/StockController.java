@@ -49,4 +49,11 @@ public class StockController {
         return stockService.getTimeSeriesIntraday(symbol.trim(), interval.trim()).map(ResponseEntity::ok)
         .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
+    @GetMapping(value = "/get-daily", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<TimeSeries>> getIntraday(@RequestParam String symbol) {
+        log.info("Received request to GET /get-daily with argument: " + symbol.trim());
+        return stockService.getTimeSeriesDaily(symbol.trim()).map(ResponseEntity::ok)
+        .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
 }

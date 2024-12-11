@@ -49,6 +49,11 @@ curl -i -X GET -H "Content-Type: application/json" localhost:8080/api/v1/stock/g
 curl -i -X GET -H "Content-Type: application/json" localhost:8080/api/v1/stock/get-intraday?symbol=nvda&interval=1min
 ```
 
+- GET /get-daily:
+```
+curl -i -X GET -H "Content-Type: application/json" localhost:8080/api/v1/stock/get-daily?symbol=nvda
+```
+
 ## Setup
 
 - Install dependencies:
