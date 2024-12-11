@@ -18,21 +18,30 @@ Microservice to fetch and record stock data.
 - Spring Dotenv
 - Lombok
 - Spring Test
+- MacOS DNS
 
 ## Endpoints
 
-Instances can be created, fetched, or deleted for the default model class whose data is stored in a Docker MySQL container:
-- POST /new-model: 
+Instances can be created, fetched, or deleted for the following model classes.
+
+### Resources
+
+- Stock (Global Quote)
+- Stock Time Series Intraday (1min, 5min, 15min, 30min, 60min)
+- Stock Time Series Daily
+- Stock Time Series Weekly (Adjusted)
+- Stock Time Series Monthly (Adjusted)
+
+### Requests
+
+- GET /:
 ```
-curl -i -X POST -H "Content-Type: application/json" -d "Model Name" http://localhost:8080/api/v1/model/new-model
+curl -i -X GET http://localhost:8080/api/v1/stock/
 ```
-- GET /get-model:
+
+- POST /get-global-quote: 
 ```
-curl -i -X GET -H "Content-Type: application/json" -d "Model Name" http://localhost:8080/api/v1/model/get-model
-```
-- DELETE /delete-model:
-```
-curl -i -X DELETE -H "Content-Type: application/json" -d "Model Name" http://localhost:8080/api/v1/model/delete-model
+curl -i -X GET -H "Content-Type: application/json" -d "AAPL" http://localhost:8080/api/v1/stock/get-global-quote
 ```
 
 ## Setup
