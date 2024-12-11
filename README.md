@@ -39,9 +39,14 @@ Requests can be made for the following resources.
 curl -i -X GET http://localhost:8080/api/v1/stock/
 ```
 
-- POST /get-global-quote: 
+- GET /get-global-quote: 
 ```
-curl -i -X GET -H "Content-Type: application/json" -d "AAPL" http://localhost:8080/api/v1/stock/get-global-quote
+curl -i -X GET -H "Content-Type: application/json" localhost:8080/api/v1/stock/get-global-quote?symbol=nvda
+```
+
+- GET /get-intraday:
+```
+curl -i -X GET -H "Content-Type: application/json" localhost:8080/api/v1/stock/get-intraday?symbol=nvda&interval=1min
 ```
 
 ## Setup
