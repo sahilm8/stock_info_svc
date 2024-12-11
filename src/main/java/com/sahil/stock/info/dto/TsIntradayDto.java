@@ -2,6 +2,9 @@ package com.sahil.stock.info.dto;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 
 @Data
@@ -45,22 +48,27 @@ public class TsIntradayDto {
     
     private Map<String, Map<String, String>> timeSeries = new HashMap<>();
     
+    @JsonProperty("1. open")
     public String getOpen(String timestamp) {
         return timeSeries.get(timestamp).get("1. open");
     }
     
+    @JsonProperty("2. high")
     public String getHigh(String timestamp) {
         return timeSeries.get(timestamp).get("2. high");
     }
     
+    @JsonProperty("3. low")
     public String getLow(String timestamp) {
         return timeSeries.get(timestamp).get("3. low");
     }
     
+    @JsonProperty("4. close")
     public String getClose(String timestamp) {
         return timeSeries.get(timestamp).get("4. close");
     }
     
+    @JsonProperty("5. volume")
     public String getVolume(String timestamp) {
         return timeSeries.get(timestamp).get("5. volume");
     }
