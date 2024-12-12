@@ -6,7 +6,7 @@
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Microservice to fetch and forward stock data.
+Microservice to fetch and return stock data.
 
 ## Stack
 
@@ -18,11 +18,11 @@ Microservice to fetch and forward stock data.
 - Spring Dotenv
 - Lombok
 - Spring Test
-- MacOS DNS
+- MacOS DNS Resolver
 
 ## Endpoints
 
-Requests can be made for the following resources.
+Requests can be made to get the following resources.
 
 ### Resources
 
@@ -41,17 +41,17 @@ curl -i -X GET http://localhost:8080/api/v1/stock/
 
 - GET /get-global-quote: 
 ```
-curl -i -X GET -H "Content-Type: application/json" localhost:8080/api/v1/stock/get-global-quote?symbol=nvda
+curl -i -X GET "http://localhost:8080/api/v1/stock/get-global-quote?symbol=nvda"
 ```
 
 - GET /get-intraday:
 ```
-curl -i -X GET -H "Content-Type: application/json" localhost:8080/api/v1/stock/get-intraday?symbol=nvda&interval=1min
+curl -i -X GET "http://localhost:8080/api/v1/stock/get-intraday?symbol=nvda&interval=5min"
 ```
 
 - GET /get-daily:
 ```
-curl -i -X GET -H "Content-Type: application/json" localhost:8080/api/v1/stock/get-daily?symbol=nvda
+curl -i -X GET "http://localhost:8080/api/v1/stock/get-daily?symbol=nvda"
 ```
 
 ## Setup
