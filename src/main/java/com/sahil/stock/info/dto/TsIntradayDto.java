@@ -45,9 +45,18 @@ public class TsIntradayDto {
         }
     }
     */
+        
+    private String interval;
+
+    public TsDailyDto(interval) {
+        this.interval = interval;
+    }
     
+    interval.equals("Time Series (1min)")
+
+    @JsonProperty(interval.e)
     private Map<String, Map<String, String>> timeSeries = new HashMap<>();
-    
+
     @JsonProperty("1. open")
     public String getOpen(String timestamp) {
         return timeSeries.get(timestamp).get("1. open");

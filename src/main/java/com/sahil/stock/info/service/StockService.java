@@ -17,11 +17,6 @@ import jakarta.annotation.PostConstruct;
 
 import com.sahil.stock.info.dto.GlobalQuoteDto;
 import com.sahil.stock.info.dto.TsDailyDto;
-import com.sahil.stock.info.dto.TsIntraday15MinDto;
-import com.sahil.stock.info.dto.TsIntraday1MinDto;
-import com.sahil.stock.info.dto.TsIntraday30MinDto;
-import com.sahil.stock.info.dto.TsIntraday5MinDto;
-import com.sahil.stock.info.dto.TsIntraday60MinDto;
 import com.sahil.stock.info.dto.TsIntradayDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -83,19 +78,23 @@ public class StockService {
             .queryParam("apikey", apiKey)
             .build())
             .retrieve()
-            .bodyToMono(getIntervalDtoClass(interval))
+            .bodyToMono(TsIntradayDto.class)
             .map(dto -> {
                 log.info("dto: " + dto);
                 TimeSeries timeSeries = new TimeSeries();
                 Map<String, StockTs> ts = new HashMap<>();
                 for (Map.Entry<String, Map<String, String>> entry : dto.getTimeSeries().entrySet()) {
-                    StockTs stockTs = new StockTs();
+                    //StockTs stockTs = new StockTs();
+                    log.info("key: " + entry.getKey());
+                    log.info("high: " + dto.getHigh(entry.getKey()));
+                    /*
                     stockTs.setOpen(new BigDecimal(entry.getValue().get(dto.getOpen(entry.getKey()))));
                     stockTs.setHigh(new BigDecimal(entry.getValue().get(dto.getHigh(entry.getKey()))));
                     stockTs.setLow(new BigDecimal(entry.getValue().get(dto.getLow(entry.getKey()))));
                     stockTs.setClose(new BigDecimal(entry.getValue().get(dto.getClose(entry.getKey()))));
                     stockTs.setVolume(new BigDecimal(entry.getValue().get(dto.getVolume(entry.getKey()))));
                     ts.put(entry.getKey(), stockTs);
+                    */
                 }
                 timeSeries.setTimeSeries(ts);
                 return timeSeries;
@@ -134,21 +133,4 @@ public class StockService {
                 return timeSeries;
             });
     }
-
-    private Class<? extends TsIntradayDto> getIntervalDtoClass(String interval) {
-        switch (interval) {
-            case "1min":
-            return TsIntraday1MinDto.class;
-            case "5min":
-            return TsIntraday5MinDto.class;
-            case "15min":
-            return TsIntraday15MinDto.class;
-            case "30min":
-            return TsIntraday30MinDto.class;
-            case "60min":
-            return TsIntraday60MinDto.class;
-            default:
-            return TsIntradayDto.class;
-        }
-    } 
 }
