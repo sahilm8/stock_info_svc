@@ -5,8 +5,10 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@Data
 @EqualsAndHashCode(callSuper=false)
 public class TsIntraday30MinDto extends TsIntradayDto {
     @JsonProperty("Time Series (30min)")

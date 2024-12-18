@@ -1,7 +1,13 @@
 package com.sahil.stock.info.dto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
+@Data
 public abstract class TsIntradayDto {
     /*
     API Response:
@@ -39,6 +45,8 @@ public abstract class TsIntradayDto {
         }
     }
     */
+
+    private Map<String, Map<String, String>> timeSeries = new HashMap<>();
 
     @JsonProperty("1. open")
     public abstract String getOpen(String timestamp);
