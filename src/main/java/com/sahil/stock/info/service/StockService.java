@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.sahil.stock.info.model.Stock;
@@ -40,8 +41,21 @@ public class StockService {
 
     @PostConstruct
     public void init() {
-        webClient = WebClient.builder().baseUrl(apiUrl).build();
-	}
+        ExchangeStrategies strategies = ExchangeStrategies
+        .builder()
+        .codecs(configurer -> 
+            configurer
+            .defaultCodecs()
+            .maxInMemorySize(1024 * 1024 * 10)  // 10MB
+        )
+        .build();
+
+        webClient = WebClient
+        .builder()
+        .baseUrl(apiUrl)
+        .exchangeStrategies(strategies)
+        .build();
+    }
 
     public Mono<Stock> getGlobalQuote(String symbol) {
         return webClient.get()
