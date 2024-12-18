@@ -89,7 +89,7 @@ public class StockService {
             .uri(uriBuilder -> uriBuilder
             .queryParam("function", ApiFunctions.TIME_SERIES_INTRADAY.getValue())
             .queryParam("symbol", symbol)
-            .queryParam("interval", interval) // Increase buffer size
+            .queryParam("interval", interval)
             .queryParam("adjusted", false)
             .queryParam("extended_hours", true)
             .queryParam("outputsize", "full")
