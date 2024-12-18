@@ -1,14 +1,8 @@
 package com.sahil.stock.info.dto;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Data;
-
-@Data
-public class TsIntradayDto {
+public abstract class TsIntradayDto {
     /*
     API Response:
     {
@@ -45,40 +39,19 @@ public class TsIntradayDto {
         }
     }
     */
-        
-    private String interval;
-
-    public TsDailyDto(interval) {
-        this.interval = interval;
-    }
-    
-    interval.equals("Time Series (1min)")
-
-    @JsonProperty(interval.e)
-    private Map<String, Map<String, String>> timeSeries = new HashMap<>();
 
     @JsonProperty("1. open")
-    public String getOpen(String timestamp) {
-        return timeSeries.get(timestamp).get("1. open");
-    }
+    public abstract String getOpen(String timestamp);
     
     @JsonProperty("2. high")
-    public String getHigh(String timestamp) {
-        return timeSeries.get(timestamp).get("2. high");
-    }
+    public abstract String getHigh(String timestamp);
     
     @JsonProperty("3. low")
-    public String getLow(String timestamp) {
-        return timeSeries.get(timestamp).get("3. low");
-    }
+    public abstract String getLow(String timestamp);
     
     @JsonProperty("4. close")
-    public String getClose(String timestamp) {
-        return timeSeries.get(timestamp).get("4. close");
-    }
+    public abstract String getClose(String timestamp);
     
     @JsonProperty("5. volume")
-    public String getVolume(String timestamp) {
-        return timeSeries.get(timestamp).get("5. volume");
-    }
+    public abstract String getVolume(String timestamp);
 }
