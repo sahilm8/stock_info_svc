@@ -95,7 +95,7 @@ public class StockService {
             .queryParam("function", ApiFunctions.TIME_SERIES_INTRADAY.getValue())
             .queryParam("symbol", symbol)
             .queryParam("interval", interval)
-            .queryParam("adjusted", false)
+            .queryParam("adjusted", true)
             .queryParam("extended_hours", true)
             // outputsize: compact (last 100 data points) or full (last 30 days data points)
             .queryParam("outputsize", "compact")
