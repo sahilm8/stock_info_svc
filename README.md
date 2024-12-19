@@ -32,6 +32,17 @@ Requests can be made to get the following resources.
 - Stock Time Series Weekly (Adjusted)
 - Stock Time Series Monthly (Adjusted)
 
+## Setup
+
+- Install dependencies:
+```
+./mvnw clean install
+```
+- Start the application:
+```
+./mvnw spring-boot:run
+```
+
 ### Requests
 
 - GET /:
@@ -54,13 +65,12 @@ curl -i -X GET "http://localhost:8080/api/v1/stock/get-intraday?symbol=nvda&inte
 curl -i -X GET "http://localhost:8080/api/v1/stock/get-daily?symbol=nvda"
 ```
 
-## Setup
+- GET /get-weekly:
+```
+curl -i -X GET "http://localhost:8080/api/v1/stock/get-weekly?symbol=nvda"
+```
 
-- Install dependencies:
+- GET /get-monthly:
 ```
-./mvnw clean install
-```
-- Start the application:
-```
-./mvnw spring-boot:run
+curl -i -X GET "http://localhost:8080/api/v1/stock/get-monthly?symbol=nvda"
 ```
