@@ -26,11 +26,18 @@ Requests can be made to get the following resources.
 
 ### Resources
 
-- Stock (Global Quote)
-- Stock Time Series Intraday (1min, 5min, 15min, 30min, 60min)
+- Stock
+    - Global Quote
+- Stock Time Series Intraday
+    - Adjusted
+    - Including extended hours
+    - Intervals: 1min, 5min, 15min, 30min, 60min
 - Stock Time Series Daily
-- Stock Time Series Weekly (Adjusted)
-- Stock Time Series Monthly (Adjusted)
+    - Not adjusted
+- Stock Time Series Weekly
+    - Adjusted
+- Stock Time Series Monthly
+    - Adjusted
 
 ## Setup
 
