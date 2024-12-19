@@ -64,4 +64,11 @@ public class StockController {
         return stockService.getTimeSeriesWeekly(symbol.trim()).map(ResponseEntity::ok)
         .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
+    @GetMapping(value = "/get-monthly", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<TimeSeriesAdjusted>> getMonthly(@RequestParam String symbol) {
+        log.info("Received request to GET /get-monthly with argument: " + symbol.trim());
+        return stockService.getTimeSeriesMonthly(symbol.trim()).map(ResponseEntity::ok)
+        .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
 }
