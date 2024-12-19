@@ -62,6 +62,7 @@ public class StockService {
             .uri(uriBuilder -> uriBuilder
             .queryParam("function", ApiFunctions.GLOBAL_QUOTE.getValue())
             .queryParam("symbol", symbol)
+            // datatype: json or csv
             .queryParam("datatype", "json")
             .queryParam("apikey", apiKey)
             .build())  
@@ -92,7 +93,9 @@ public class StockService {
             .queryParam("interval", interval)
             .queryParam("adjusted", false)
             .queryParam("extended_hours", true)
-            .queryParam("outputsize", "full")
+            // outputsize: compact (last 100 data points) or full (last 30 days data points)
+            .queryParam("outputsize", "compact")
+            // datatype: json or csv
             .queryParam("datatype", "json")
             .queryParam("apikey", apiKey)
             .build())
@@ -121,7 +124,9 @@ public class StockService {
             .uri(uriBuilder -> uriBuilder
             .queryParam("function", ApiFunctions.TIME_SERIES_DAILY.getValue())
             .queryParam("symbol", symbol)
-            .queryParam("outputsize", "full")
+            // outputsize: compact (last 100 data points) or full (last 20+ years data points)
+            .queryParam("outputsize", "compact")
+            // datatype: json or csv
             .queryParam("datatype", "json")
             .queryParam("apikey", apiKey)
             .build())
@@ -133,15 +138,11 @@ public class StockService {
                 Map<String, StockTs> ts = new HashMap<>();
                 for (Map.Entry<String, Map<String, String>> entry : dto.getTimeSeries().entrySet()) {
                     StockTs stockTs = new StockTs();
-                    log.info("key: " + entry.getKey());
-                    log.info("value: " + entry.getValue());
-                    /*
-                    stockTs.setOpen(new BigDecimal(entry.getValue().get(dto.getOpen(entry.getKey()))));
-                    stockTs.setHigh(new BigDecimal(entry.getValue().get(dto.getHigh(entry.getKey()))));
-                    stockTs.setLow(new BigDecimal(entry.getValue().get(dto.getLow(entry.getKey()))));
-                    stockTs.setClose(new BigDecimal(entry.getValue().get(dto.getClose(entry.getKey()))));
-                    stockTs.setVolume(new BigDecimal(entry.getValue().get(dto.getVolume(entry.getKey()))));
-                    */
+                    stockTs.setOpen(new BigDecimal(dto.getOpen(entry.getKey())));
+                    stockTs.setHigh(new BigDecimal(dto.getHigh(entry.getKey())));
+                    stockTs.setLow(new BigDecimal(dto.getLow(entry.getKey())));
+                    stockTs.setClose(new BigDecimal(dto.getClose(entry.getKey())));
+                    stockTs.setVolume(new BigDecimal(dto.getVolume(entry.getKey())));
                     ts.put(entry.getKey(), stockTs);
                 }
                 timeSeries.setTimeSeries(ts);
