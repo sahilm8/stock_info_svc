@@ -43,7 +43,7 @@ Requests can be made to get the following resources.
 ./mvnw spring-boot:run
 ```
 
-### Requests
+## Requests
 
 - GET /:
 ```
