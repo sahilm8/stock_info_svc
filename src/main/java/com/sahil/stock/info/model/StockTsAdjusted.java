@@ -12,5 +12,5 @@ public class StockTsAdjusted {
     private BigDecimal close;
     private BigDecimal adjustedClose;
     private BigDecimal volume;
-    private String dividendAmount;
+    private BigDecimal dividendAmount;
 }

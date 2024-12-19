@@ -11,7 +11,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.sahil.stock.info.model.Stock;
 import com.sahil.stock.info.model.StockTs;
+import com.sahil.stock.info.model.StockTsAdjusted;
 import com.sahil.stock.info.model.TimeSeries;
+import com.sahil.stock.info.model.TimeSeriesAdjusted;
 import com.sahil.stock.info.util.ApiFunctions;
 
 import jakarta.annotation.PostConstruct;
@@ -24,6 +26,7 @@ import com.sahil.stock.info.dto.TsIntraday30MinDto;
 import com.sahil.stock.info.dto.TsIntraday5MinDto;
 import com.sahil.stock.info.dto.TsIntraday60MinDto;
 import com.sahil.stock.info.dto.TsIntradayDto;
+import com.sahil.stock.info.dto.TsWeeklyDto;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -65,7 +68,7 @@ public class StockService {
             // datatype: json or csv
             .queryParam("datatype", "json")
             .queryParam("apikey", apiKey)
-            .build())  
+            .build())
             .retrieve()
             .bodyToMono(GlobalQuoteDto.class)
             .map(dto -> {
@@ -148,6 +151,36 @@ public class StockService {
                 timeSeries.setTimeSeries(ts);
                 return timeSeries;
             });
+    }
+
+    public Mono<TimeSeriesAdjusted> getTimeSeriesWeekly(String symbol) {
+        return webClient.get()
+        .uri(uriBuilder -> uriBuilder
+        .queryParam("function", ApiFunctions.TIME_SERIES_WEEKLY.getValue())
+        .queryParam("symbol", symbol)
+        .queryParam("datatype", "json")
+        .queryParam("apikey", apiKey)
+        .build())
+        .retrieve()
+        .bodyToMono(TsWeeklyDto.class)
+        .map(dto -> {
+            log.info("dto: " + dto);
+            TimeSeriesAdjusted timeSeriesAdjusted = new TimeSeriesAdjusted();
+            Map<String, StockTsAdjusted> ts = new HashMap<>();
+            for (Map.Entry<String, Map<String, String>> entry : dto.getTimeSeries().entrySet()) {
+                StockTsAdjusted stockTsAdjusted = new StockTsAdjusted();
+                stockTsAdjusted.setOpen(new BigDecimal(dto.getOpen(entry.getKey())));
+                stockTsAdjusted.setHigh(new BigDecimal(dto.getHigh(entry.getKey())));
+                stockTsAdjusted.setLow(new BigDecimal(dto.getLow(entry.getKey())));
+                stockTsAdjusted.setClose(new BigDecimal(dto.getClose(entry.getKey())));
+                stockTsAdjusted.setAdjustedClose(new BigDecimal(dto.getAdjustedClose(entry.getKey())));
+                stockTsAdjusted.setVolume(new BigDecimal(dto.getVolume(entry.getKey())));
+                stockTsAdjusted.setDividendAmount(new BigDecimal(dto.getDividendAmount(entry.getKey())));
+                ts.put(entry.getKey(), stockTsAdjusted);
+            }
+            timeSeriesAdjusted.setTimeSeries(ts);
+            return timeSeriesAdjusted;
+        });
     }
 
     private Class<? extends TsIntradayDto> getIntervalDtoClass(String interval) {
