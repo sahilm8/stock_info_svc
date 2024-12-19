@@ -41,6 +41,7 @@ public class TsDailyDto {
                 "4. close": "229.3300",
                 "5. volume": "3610257"
             },
+            ...
         }
     }
     */

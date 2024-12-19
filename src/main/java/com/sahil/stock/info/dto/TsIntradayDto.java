@@ -41,7 +41,8 @@ public abstract class TsIntradayDto {
                 "3. low": "247.6100",
                 "4. close": "247.6300",
                 "5. volume": "1088"
-            }
+            },
+            ...
         }
     }
     */
