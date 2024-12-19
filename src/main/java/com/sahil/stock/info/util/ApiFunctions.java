@@ -3,7 +3,8 @@ package com.sahil.stock.info.util;
 public enum ApiFunctions {
     GLOBAL_QUOTE("GLOBAL_QUOTE"),
     TIME_SERIES_INTRADAY("TIME_SERIES_INTRADAY"),
-    TIME_SERIES_DAILY("TIME_SERIES_DAILY");
+    TIME_SERIES_DAILY("TIME_SERIES_DAILY"),
+    TIME_SERIES_WEEKLY("TIME_SERIES_WEEKLY");
     
     private final String value;
     
