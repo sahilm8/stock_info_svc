@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sahil.stock.info.model.Stock;
 import com.sahil.stock.info.model.TimeSeries;
+import com.sahil.stock.info.model.TimeSeriesAdjusted;
 import com.sahil.stock.info.service.StockService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,13 @@ public class StockController {
     public Mono<ResponseEntity<TimeSeries>> getIntraday(@RequestParam String symbol) {
         log.info("Received request to GET /get-daily with argument: " + symbol.trim());
         return stockService.getTimeSeriesDaily(symbol.trim()).map(ResponseEntity::ok)
+        .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @GetMapping(value = "/get-weekly", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<TimeSeriesAdjusted>> getWeekly(@RequestParam String symbol) {
+        log.info("Received request to GET /get-weekly with argument: " + symbol.trim());
+        return stockService.getTimeSeriesWeekly(symbol.trim()).map(ResponseEntity::ok)
         .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
