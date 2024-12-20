@@ -28,7 +28,7 @@ public class StockController {
     public String home() {
         log.info("Received request to GET /.");
         return String.format(
-                "Stock Info Service%n%n" +
+                "Stock Info API%n%n" +
                         "Welcome to the stock endpoint, you can make the following requests:%n" +
                         "- GET /get-global-quote%n" +
                         "- GET /get-intraday%n" +
