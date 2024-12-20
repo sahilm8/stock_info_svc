@@ -6,7 +6,7 @@
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Microservice to fetch and return stock data.
+API to fetch and return stock data.
 
 ## Stack
 
@@ -21,11 +21,20 @@ Microservice to fetch and return stock data.
 - Spring Test
 - MacOS DNS Resolver
 
+## Setup
+
+- Install dependencies:
+```
+./mvnw clean install
+```
+- Start the application:
+```
+./mvnw spring-boot:run
+```
+
 ## Endpoints
 
-Requests can be made to get the following resources.
-
-### Resources
+Requests can be made to get the following resources:
 
 - Stock
     - Global Quote
@@ -40,18 +49,7 @@ Requests can be made to get the following resources.
 - Stock Time Series Monthly
     - Adjusted
 
-## Setup
-
-- Install dependencies:
-```
-./mvnw clean install
-```
-- Start the application:
-```
-./mvnw spring-boot:run
-```
-
-## Requests
+### Requests
 
 - GET /:
 ```
