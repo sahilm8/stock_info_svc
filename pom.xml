@@ -13,7 +13,7 @@
 	<version>1.0.1</version>
 	<name>stock_info_svc</name>
 	<description>
-		Microservice to fetch and return stock data.
+		API to fetch and return stock data.
 	</description>
 	<url/>
 	<licenses>
