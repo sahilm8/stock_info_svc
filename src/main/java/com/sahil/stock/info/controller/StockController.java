@@ -46,7 +46,7 @@ public class StockController {
 
     @GetMapping(value = "/get-intraday", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<TimeSeries>> getIntraday(@RequestParam String symbol, @RequestParam String interval) {
-        log.info("Received request to GET /get-intraday with argument: " + symbol.trim() + ", " + interval.trim());
+        log.info("Received request to GET /get-intraday with arguments: " + symbol.trim() + ", " + interval.trim());
         return stockService.getTimeSeriesIntraday(symbol.trim(), interval.trim()).map(ResponseEntity::ok)
         .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
