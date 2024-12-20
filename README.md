@@ -6,7 +6,7 @@
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-API to fetch and return stock data.
+API to fetch and return stock data. Based on the [Alpha Vantage API](https://www.alphavantage.co).
 
 ## Stack
 
