@@ -15,6 +15,7 @@ Microservice to fetch and return stock data.
 - Spring Boot
 - Spring Web
 - Spring Webflux
+- Reactor Core
 - Spring Dotenv
 - Lombok
 - Spring Test
