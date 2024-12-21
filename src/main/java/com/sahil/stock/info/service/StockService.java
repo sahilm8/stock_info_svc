@@ -76,16 +76,16 @@ public class StockService {
             .map(dto -> {
                 log.info("dto: " + dto);
                 Stock stock = new Stock();
-                stock.setSymbol(dto.getSymbol());
-                stock.setOpen(dto.getOpen());
-                stock.setHigh(dto.getHigh());
-                stock.setLow(dto.getLow());
-                stock.setPrice(dto.getPrice());
-                stock.setVolume(dto.getVolume());
+                stock.setSymbol(dto.getSymbol() != null ? dto.getSymbol() : symbol);
+                stock.setOpen(dto.getOpen() != null ? new BigDecimal(dto.getOpen()) : BigDecimal.ZERO);
+                stock.setHigh(dto.getHigh() != null ? new BigDecimal(dto.getHigh()) : BigDecimal.ZERO);
+                stock.setLow(dto.getLow() != null ? new BigDecimal(dto.getLow()) : BigDecimal.ZERO);
+                stock.setPrice(dto.getPrice() != null ? new BigDecimal(dto.getPrice()) : BigDecimal.ZERO);
+                stock.setVolume(dto.getVolume() != null ? new BigDecimal(dto.getVolume()) : BigDecimal.ZERO);
                 stock.setLatestTradingDay(dto.getLatestTradingDay());
-                stock.setPrevClose(dto.getPrevClose());
-                stock.setChange(dto.getChange());
-                stock.setChangePercent(dto.getChangePercent());
+                stock.setPrevClose(dto.getPrevClose() != null ? new BigDecimal(dto.getPrevClose()) : BigDecimal.ZERO);
+                stock.setChange(dto.getChange() != null ? new BigDecimal(dto.getChange()) : BigDecimal.ZERO);
+                stock.setChangePercent(dto.getChangePercent() != null ? new BigDecimal(dto.getChangePercent().replace("%", "")) : BigDecimal.ZERO);
                 return stock;
             });
     }
