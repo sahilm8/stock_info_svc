@@ -64,6 +64,7 @@ public class StockService {
     public Mono<Stock> getGlobalQuote(String symbol) {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
+            .path("/query")
             .queryParam("function", ApiFunctions.GLOBAL_QUOTE.getValue())
             .queryParam("symbol", symbol)
             // datatype: json or csv
@@ -92,6 +93,7 @@ public class StockService {
     public Mono<TimeSeries> getTimeSeriesIntraday(String symbol, String interval) {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
+            .path("/query")
             .queryParam("function", ApiFunctions.TIME_SERIES_INTRADAY.getValue())
             .queryParam("symbol", symbol)
             .queryParam("interval", interval)
@@ -126,6 +128,7 @@ public class StockService {
     public Mono<TimeSeries> getTimeSeriesDaily(String symbol) {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
+            .path("/query")
             .queryParam("function", ApiFunctions.TIME_SERIES_DAILY.getValue())
             .queryParam("symbol", symbol)
             // outputsize: compact (last 100 data points) or full (last 20+ years data points)
@@ -157,6 +160,7 @@ public class StockService {
     public Mono<TimeSeriesAdjusted> getTimeSeriesWeekly(String symbol) {
         return webClient.get()
         .uri(uriBuilder -> uriBuilder
+        .path("/query")
         .queryParam("function", ApiFunctions.TIME_SERIES_WEEKLY_ADJUSTED.getValue())
         .queryParam("symbol", symbol)
         // datatype: json or csv
@@ -188,6 +192,7 @@ public class StockService {
     public Mono<TimeSeriesAdjusted> getTimeSeriesMonthly(String symbol) {
         return webClient.get()
         .uri(uriBuilder -> uriBuilder
+        .path("/query")
         .queryParam("function", ApiFunctions.TIME_SERIES_MONTHLY_ADJUSTED.getValue())
         .queryParam("symbol", symbol)
         // datatype: json or csv
