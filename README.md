@@ -37,16 +37,21 @@ API to fetch and return stock data. Based on the [Alpha Vantage API](https://www
 Requests can be made to get the following resources:
 
 - Stock
+    - OHLCV
     - Global Quote
 - Stock Time Series Intraday
+    - OHLCV
     - Adjusted
     - Including extended hours
     - Intervals: 1min, 5min, 15min, 30min, 60min
 - Stock Time Series Daily
+    - OHLCV
     - Not adjusted
 - Stock Time Series Weekly
+    - OHLCV
     - Adjusted
 - Stock Time Series Monthly
+    - OHLCV
     - Adjusted
 
 ### Requests
