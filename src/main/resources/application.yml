@@ -4,9 +4,9 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.sahil.stock.info: DEBUG
+    org.springframework.web: DEBUG
 
 stock:
-  api_url: ${STOCK_API_URL}
-  api_key: ${STOCK_API_KEY}
+  api-url: ${STOCK_API_URL}
+  api-key: ${STOCK_API_KEY}
