@@ -1,240 +1,129 @@
 package com.sahil.stock.info.service;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.sahil.stock.info.model.Stock;
-import com.sahil.stock.info.model.StockTs;
-import com.sahil.stock.info.model.StockTsAdjusted;
-import com.sahil.stock.info.model.TimeSeries;
-import com.sahil.stock.info.model.TimeSeriesAdjusted;
 import com.sahil.stock.info.util.ApiFunctions;
 
 import jakarta.annotation.PostConstruct;
 
-import com.sahil.stock.info.dto.GlobalQuoteDto;
-import com.sahil.stock.info.dto.TsDailyDto;
-import com.sahil.stock.info.dto.TsIntraday15MinDto;
-import com.sahil.stock.info.dto.TsIntraday1MinDto;
-import com.sahil.stock.info.dto.TsIntraday30MinDto;
-import com.sahil.stock.info.dto.TsIntraday5MinDto;
-import com.sahil.stock.info.dto.TsIntraday60MinDto;
-import com.sahil.stock.info.dto.TsIntradayDto;
-import com.sahil.stock.info.dto.TsMonthlyDto;
-import com.sahil.stock.info.dto.TsWeeklyDto;
+import com.sahil.stock.info.dto.GetIntradayTsRequest;
+import com.sahil.stock.info.dto.GetIntradayTsResponse;
+import com.sahil.stock.info.dto.GetMonthlyTsRequest;
+import com.sahil.stock.info.dto.GetStockRequest;
+import com.sahil.stock.info.dto.GetStockResponse;
+import com.sahil.stock.info.dto.GetWeeklyTsRequest;
+import com.sahil.stock.info.dto.GetDailyTsRequest;
+import com.sahil.stock.info.dto.GetDailyTsResponse;
+import com.sahil.stock.info.dto.GetMonthlyTsResponse;
+import com.sahil.stock.info.dto.GetWeeklyTsResponse;
 
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Service
-@Slf4j
 public class StockService {
-    @Value("${stock.api_url}")
+    @Value("${stock.api-url}")
     private String apiUrl;
 
-    @Value("${stock.api_key}")
+    @Value("${stock.api-key}")
     private String apiKey;
-    
+
     private WebClient webClient;
 
     @PostConstruct
     public void init() {
         ExchangeStrategies strategies = ExchangeStrategies
-        .builder()
-        .codecs(configurer -> 
-            configurer
-            .defaultCodecs()
-            .maxInMemorySize(1024 * 1024 * 10)  // 10MB
-        )
-        .build();
+                .builder()
+                .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(1024 * 1024 * 10) // 10MB
+                )
+                .build();
 
         webClient = WebClient
-        .builder()
-        .baseUrl(apiUrl)
-        .exchangeStrategies(strategies)
-        .build();
+                .builder()
+                .baseUrl(apiUrl)
+                .exchangeStrategies(strategies)
+                .build();
     }
 
-    public Mono<Stock> getGlobalQuote(String symbol) {
+    public Mono<GetStockResponse> getStock(GetStockRequest getStockRequest) {
         return webClient.get()
-            .uri(uriBuilder -> uriBuilder
-            .path("/query")
-            .queryParam("function", ApiFunctions.GLOBAL_QUOTE.getValue())
-            .queryParam("symbol", symbol)
-            // datatype: json or csv
-            .queryParam("datatype", "json")
-            .queryParam("apikey", apiKey)
-            .build())
-            .retrieve()
-            .bodyToMono(GlobalQuoteDto.class)
-            .map(dto -> {
-                log.info("dto: " + dto);
-                Stock stock = new Stock();
-                stock.setSymbol(dto.getSymbol() != null ? dto.getSymbol() : symbol);
-                stock.setOpen(dto.getOpen() != null ? new BigDecimal(dto.getOpen()) : BigDecimal.ZERO);
-                stock.setHigh(dto.getHigh() != null ? new BigDecimal(dto.getHigh()) : BigDecimal.ZERO);
-                stock.setLow(dto.getLow() != null ? new BigDecimal(dto.getLow()) : BigDecimal.ZERO);
-                stock.setPrice(dto.getPrice() != null ? new BigDecimal(dto.getPrice()) : BigDecimal.ZERO);
-                stock.setVolume(dto.getVolume() != null ? new BigDecimal(dto.getVolume()) : BigDecimal.ZERO);
-                stock.setLatestTradingDay(dto.getLatestTradingDay());
-                stock.setPrevClose(dto.getPrevClose() != null ? new BigDecimal(dto.getPrevClose()) : BigDecimal.ZERO);
-                stock.setChange(dto.getChange() != null ? new BigDecimal(dto.getChange()) : BigDecimal.ZERO);
-                stock.setChangePercent(dto.getChangePercent() != null ? new BigDecimal(dto.getChangePercent().replace("%", "")) : BigDecimal.ZERO);
-                return stock;
-            });
+                .uri(uriBuilder -> uriBuilder
+                        .path("/query")
+                        .queryParam("function", ApiFunctions.GLOBAL_QUOTE.getValue())
+                        .queryParam("symbol", getStockRequest.getSymbol())
+                        // datatype: json or csv
+                        .queryParam("datatype", "json")
+                        .queryParam("apikey", apiKey)
+                        .build())
+                .retrieve()
+                .bodyToMono(GetStockResponse.class);
     }
 
-    public Mono<TimeSeries> getTimeSeriesIntraday(String symbol, String interval) {
+    public Mono<GetIntradayTsResponse> getIntradayTs(GetIntradayTsRequest getIntradayTsRequest) {
         return webClient.get()
-            .uri(uriBuilder -> uriBuilder
-            .path("/query")
-            .queryParam("function", ApiFunctions.TIME_SERIES_INTRADAY.getValue())
-            .queryParam("symbol", symbol)
-            .queryParam("interval", interval)
-            .queryParam("adjusted", true)
-            .queryParam("extended_hours", true)
-            // outputsize: compact (last 100 data points) or full (last 30 days data points)
-            .queryParam("outputsize", "compact")
-            // datatype: json or csv
-            .queryParam("datatype", "json")
-            .queryParam("apikey", apiKey)
-            .build())
-            .retrieve()
-            .bodyToMono(getIntervalDtoClass(interval))
-            .map(dto -> {
-                log.info("dto: " + dto);
-                TimeSeries timeSeries = new TimeSeries();
-                Map<String, StockTs> ts = new HashMap<>();
-                for (Map.Entry<String, Map<String, String>> entry : dto.getTimeSeries().entrySet()) {
-                    StockTs stockTs = new StockTs();
-                    stockTs.setOpen(new BigDecimal(dto.getOpen(entry.getKey())));
-                    stockTs.setHigh(new BigDecimal(dto.getHigh(entry.getKey())));
-                    stockTs.setLow(new BigDecimal(dto.getLow(entry.getKey())));
-                    stockTs.setClose(new BigDecimal(dto.getClose(entry.getKey())));
-                    stockTs.setVolume(new BigDecimal(dto.getVolume(entry.getKey())));
-                    ts.put(entry.getKey(), stockTs);
-                }
-                timeSeries.setTimeSeries(ts);
-                return timeSeries;
-            });
+                .uri(uriBuilder -> uriBuilder
+                        .path("/query")
+                        .queryParam("function", ApiFunctions.TIME_SERIES_INTRADAY.getValue())
+                        .queryParam("symbol", getIntradayTsRequest.getSymbol())
+                        .queryParam("interval", getIntradayTsRequest.getInterval())
+                        .queryParam("adjusted", true)
+                        .queryParam("extended_hours", true)
+                        // outputsize: compact (last 100 data points) or full (last 30 days data points)
+                        .queryParam("outputsize", "compact")
+                        // datatype: json or csv
+                        .queryParam("datatype", "json")
+                        .queryParam("apikey", apiKey)
+                        .build())
+                .retrieve()
+                .bodyToMono(GetIntradayTsResponse.class);
     }
 
-    public Mono<TimeSeries> getTimeSeriesDaily(String symbol) {
+    public Mono<GetDailyTsResponse> getDailyTs(GetDailyTsRequest getDailyTsRequest) {
         return webClient.get()
-            .uri(uriBuilder -> uriBuilder
-            .path("/query")
-            .queryParam("function", ApiFunctions.TIME_SERIES_DAILY.getValue())
-            .queryParam("symbol", symbol)
-            // outputsize: compact (last 100 data points) or full (last 20+ years data points)
-            .queryParam("outputsize", "compact")
-            // datatype: json or csv
-            .queryParam("datatype", "json")
-            .queryParam("apikey", apiKey)
-            .build())
-            .retrieve()
-            .bodyToMono(TsDailyDto.class)
-            .map(dto -> {
-                log.info("dto: " + dto);
-                TimeSeries timeSeries = new TimeSeries();
-                Map<String, StockTs> ts = new HashMap<>();
-                for (Map.Entry<String, Map<String, String>> entry : dto.getTimeSeries().entrySet()) {
-                    StockTs stockTs = new StockTs();
-                    stockTs.setOpen(new BigDecimal(dto.getOpen(entry.getKey())));
-                    stockTs.setHigh(new BigDecimal(dto.getHigh(entry.getKey())));
-                    stockTs.setLow(new BigDecimal(dto.getLow(entry.getKey())));
-                    stockTs.setClose(new BigDecimal(dto.getClose(entry.getKey())));
-                    stockTs.setVolume(new BigDecimal(dto.getVolume(entry.getKey())));
-                    ts.put(entry.getKey(), stockTs);
-                }
-                timeSeries.setTimeSeries(ts);
-                return timeSeries;
-            });
+                .uri(uriBuilder -> uriBuilder
+                        .path("/query")
+                        .queryParam("function", ApiFunctions.TIME_SERIES_DAILY.getValue())
+                        .queryParam("symbol", getDailyTsRequest.getSymbol())
+                        // outputsize: compact (last 100 data points) or full (last 20+ years data
+                        // points)
+                        .queryParam("outputsize", "compact")
+                        // datatype: json or csv
+                        .queryParam("datatype", "json")
+                        .queryParam("apikey", apiKey)
+                        .build())
+                .retrieve()
+                .bodyToMono(GetDailyTsResponse.class);
     }
 
-    public Mono<TimeSeriesAdjusted> getTimeSeriesWeekly(String symbol) {
+    public Mono<GetWeeklyTsResponse> getWeeklyTs(GetWeeklyTsRequest getWeeklyTsRequest) {
         return webClient.get()
-        .uri(uriBuilder -> uriBuilder
-        .path("/query")
-        .queryParam("function", ApiFunctions.TIME_SERIES_WEEKLY_ADJUSTED.getValue())
-        .queryParam("symbol", symbol)
-        // datatype: json or csv
-        .queryParam("datatype", "json")
-        .queryParam("apikey", apiKey)
-        .build())
-        .retrieve()
-        .bodyToMono(TsWeeklyDto.class)
-        .map(dto -> {
-            log.info("dto: " + dto);
-            TimeSeriesAdjusted timeSeriesAdjusted = new TimeSeriesAdjusted();
-            Map<String, StockTsAdjusted> ts = new HashMap<>();
-            for (Map.Entry<String, Map<String, String>> entry : dto.getTimeSeries().entrySet()) {
-                StockTsAdjusted stockTsAdjusted = new StockTsAdjusted();
-                stockTsAdjusted.setOpen(new BigDecimal(dto.getOpen(entry.getKey())));
-                stockTsAdjusted.setHigh(new BigDecimal(dto.getHigh(entry.getKey())));
-                stockTsAdjusted.setLow(new BigDecimal(dto.getLow(entry.getKey())));
-                stockTsAdjusted.setClose(new BigDecimal(dto.getClose(entry.getKey())));
-                stockTsAdjusted.setAdjustedClose(new BigDecimal(dto.getAdjustedClose(entry.getKey())));
-                stockTsAdjusted.setVolume(new BigDecimal(dto.getVolume(entry.getKey())));
-                stockTsAdjusted.setDividendAmount(new BigDecimal(dto.getDividendAmount(entry.getKey())));
-                ts.put(entry.getKey(), stockTsAdjusted);
-            }
-            timeSeriesAdjusted.setTimeSeries(ts);
-            return timeSeriesAdjusted;
-        });
+                .uri(uriBuilder -> uriBuilder
+                        .path("/query")
+                        .queryParam("function", ApiFunctions.TIME_SERIES_WEEKLY_ADJUSTED.getValue())
+                        .queryParam("symbol", getWeeklyTsRequest.getSymbol())
+                        // datatype: json or csv
+                        .queryParam("datatype", "json")
+                        .queryParam("apikey", apiKey)
+                        .build())
+                .retrieve()
+                .bodyToMono(GetWeeklyTsResponse.class);
     }
 
-    public Mono<TimeSeriesAdjusted> getTimeSeriesMonthly(String symbol) {
+    public Mono<GetMonthlyTsResponse> getMonthlyTs(GetMonthlyTsRequest getMonthlyTsRequest) {
         return webClient.get()
-        .uri(uriBuilder -> uriBuilder
-        .path("/query")
-        .queryParam("function", ApiFunctions.TIME_SERIES_MONTHLY_ADJUSTED.getValue())
-        .queryParam("symbol", symbol)
-        // datatype: json or csv
-        .queryParam("datatype", "json")
-        .queryParam("apikey", apiKey)
-        .build())
-        .retrieve()
-        .bodyToMono(TsMonthlyDto.class)
-        .map(dto -> {
-            log.info("dto: " + dto);
-            TimeSeriesAdjusted timeSeriesAdjusted = new TimeSeriesAdjusted();
-            Map<String, StockTsAdjusted> ts = new HashMap<>();
-            for (Map.Entry<String, Map<String, String>> entry : dto.getTimeSeries().entrySet()) {
-                StockTsAdjusted stockTsAdjusted = new StockTsAdjusted();
-                stockTsAdjusted.setOpen(new BigDecimal(dto.getOpen(entry.getKey())));
-                stockTsAdjusted.setHigh(new BigDecimal(dto.getHigh(entry.getKey())));
-                stockTsAdjusted.setLow(new BigDecimal(dto.getLow(entry.getKey())));
-                stockTsAdjusted.setClose(new BigDecimal(dto.getClose(entry.getKey())));
-                stockTsAdjusted.setAdjustedClose(new BigDecimal(dto.getAdjustedClose(entry.getKey())));
-                stockTsAdjusted.setVolume(new BigDecimal(dto.getVolume(entry.getKey())));
-                stockTsAdjusted.setDividendAmount(new BigDecimal(dto.getDividendAmount(entry.getKey())));
-                ts.put(entry.getKey(), stockTsAdjusted);
-            }
-            timeSeriesAdjusted.setTimeSeries(ts);
-            return timeSeriesAdjusted;
-        });
-    }
-
-    private Class<? extends TsIntradayDto> getIntervalDtoClass(String interval) {
-        switch (interval) {
-            case "1min":
-            return TsIntraday1MinDto.class;
-            case "5min":
-            return TsIntraday5MinDto.class;
-            case "15min":
-            return TsIntraday15MinDto.class;
-            case "30min":
-            return TsIntraday30MinDto.class;
-            case "60min":
-            return TsIntraday60MinDto.class;
-            default:
-            return TsIntradayDto.class;
-        }
+                .uri(uriBuilder -> uriBuilder
+                        .path("/query")
+                        .queryParam("function", ApiFunctions.TIME_SERIES_MONTHLY_ADJUSTED.getValue())
+                        .queryParam("symbol", getMonthlyTsRequest.getSymbol())
+                        // datatype: json or csv
+                        .queryParam("datatype", "json")
+                        .queryParam("apikey", apiKey)
+                        .build())
+                .retrieve()
+                .bodyToMono(GetMonthlyTsResponse.class);
     }
 }

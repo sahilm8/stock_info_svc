@@ -1,74 +1,80 @@
 package com.sahil.stock.info.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sahil.stock.info.model.Stock;
-import com.sahil.stock.info.model.TimeSeries;
-import com.sahil.stock.info.model.TimeSeriesAdjusted;
+import com.sahil.stock.info.dto.GetDailyTsRequest;
+import com.sahil.stock.info.dto.GetDailyTsResponse;
+import com.sahil.stock.info.dto.GetIntradayTsRequest;
+import com.sahil.stock.info.dto.GetIntradayTsResponse;
+import com.sahil.stock.info.dto.GetMonthlyTsRequest;
+import com.sahil.stock.info.dto.GetMonthlyTsResponse;
+import com.sahil.stock.info.dto.GetStockRequest;
+import com.sahil.stock.info.dto.GetStockResponse;
+import com.sahil.stock.info.dto.GetWeeklyTsRequest;
+import com.sahil.stock.info.dto.GetWeeklyTsResponse;
 import com.sahil.stock.info.service.StockService;
 
-import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("api/v1/stock")
-@Slf4j
+@RequestMapping("/api/v1/stock")
+@RequiredArgsConstructor
+@Validated
 public class StockController {
-    @Autowired
-    private StockService stockService;
+    private final StockService stockService;
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public String home() {
-        log.info("Received request to GET /.");
         return String.format(
                 "Stock Info API%n%n" +
-                        "Welcome to the stock endpoint, you can make the following requests:%n" +
-                        "- GET /get-global-quote%n" +
-                        "- GET /get-intraday%n" +
-                        "- GET /get-daily%n" +
-                        "- GET /get-weekly%n" +
-                        "- GET /get-monthly%n");
+                        "Welcome to the /stock endpoint, you can make the following requests:%n" +
+                        "- GET /get-stock%n" +
+                        "- GET /get-intraday-ts%n" +
+                        "- GET /get-daily-ts%n" +
+                        "- GET /get-weekly-ts%n" +
+                        "- GET /get-monthly-ts%n");
     }
 
-    @GetMapping(value = "/get-global-quote", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<Stock>> getGlobalQuote(@RequestParam String symbol) {
-        log.info("Received request to GET /get-global-quote with argument: " + symbol.trim());
-        return stockService.getGlobalQuote(symbol.trim()).map(ResponseEntity::ok)
-        .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    @GetMapping(value = "/get-stock", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mono<GetStockResponse>> getStock(@Valid @RequestBody GetStockRequest getStockRequest) {
+        return ResponseEntity.ok(stockService.getStock(getStockRequest));
     }
 
-    @GetMapping(value = "/get-intraday", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<TimeSeries>> getIntraday(@RequestParam String symbol, @RequestParam String interval) {
-        log.info("Received request to GET /get-intraday with arguments: " + symbol.trim() + ", " + interval.trim());
-        return stockService.getTimeSeriesIntraday(symbol.trim(), interval.trim()).map(ResponseEntity::ok)
-        .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    @GetMapping(value = "/get-intraday-ts", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mono<GetIntradayTsResponse>> getIntradayTs(
+            @Valid @RequestBody GetIntradayTsRequest getIntradayTsRequest) {
+        return ResponseEntity.ok(stockService.getIntradayTs(getIntradayTsRequest));
     }
 
-    @GetMapping(value = "/get-daily", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<TimeSeries>> getIntraday(@RequestParam String symbol) {
-        log.info("Received request to GET /get-daily with argument: " + symbol.trim());
-        return stockService.getTimeSeriesDaily(symbol.trim()).map(ResponseEntity::ok)
-        .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    @GetMapping(value = "/get-daily-ts", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mono<GetDailyTsResponse>> getDailyTs(
+            @Valid @RequestBody GetDailyTsRequest getDailyTsRequest) {
+        return ResponseEntity.ok(stockService.getDailyTs(getDailyTsRequest));
     }
 
-    @GetMapping(value = "/get-weekly", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<TimeSeriesAdjusted>> getWeekly(@RequestParam String symbol) {
-        log.info("Received request to GET /get-weekly with argument: " + symbol.trim());
-        return stockService.getTimeSeriesWeekly(symbol.trim()).map(ResponseEntity::ok)
-        .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    @GetMapping(value = "/get-weekly-ts", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mono<GetWeeklyTsResponse>> getWeeklyTs(
+            @Valid @RequestBody GetWeeklyTsRequest getWeeklyTsRequest) {
+        return ResponseEntity.ok(stockService.getWeeklyTs(getWeeklyTsRequest));
     }
 
-    @GetMapping(value = "/get-monthly", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<TimeSeriesAdjusted>> getMonthly(@RequestParam String symbol) {
-        log.info("Received request to GET /get-monthly with argument: " + symbol.trim());
-        return stockService.getTimeSeriesMonthly(symbol.trim()).map(ResponseEntity::ok)
-        .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    @GetMapping(value = "/get-monthly-ts", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mono<GetMonthlyTsResponse>> getMonthlyTs(
+            @Valid @RequestBody GetMonthlyTsRequest getMonthlyTsRequest) {
+        return ResponseEntity.ok(stockService.getMonthlyTs(getMonthlyTsRequest));
+    }
+
+    @GetMapping(value = "/*", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> invalid() {
+        return ResponseEntity
+                .ok("Invalid request, please refer to the README at https://github.com/sahilm8/stock_info_svc");
     }
 }
