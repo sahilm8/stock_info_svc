@@ -1,5 +1,6 @@
 package com.sahil.stock.info.dto;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -54,9 +55,8 @@ public class GetIntradayTsResponse {
      * }
      */
 
-    @JsonProperty("Time Series")
+    @JsonProperty("Time Series (1min)")
     @JsonAlias({
-            "Time Series (1min)",
             "Time Series (5min)",
             "Time Series (15min)",
             "Time Series (30min)",
