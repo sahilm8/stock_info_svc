@@ -16,6 +16,8 @@ API to fetch and return stock data. Based on the [Alpha Vantage API](https://www
 - Spring Web
 - Spring Webflux
 - Reactor Core
+- Spring Validation
+- Jakarta Validation
 - Spring Dotenv
 - Lombok
 - Spring Test
@@ -24,64 +26,88 @@ API to fetch and return stock data. Based on the [Alpha Vantage API](https://www
 ## Setup
 
 - Install dependencies:
+
 ```
 ./mvnw clean install
 ```
+
 - Start the application:
+
 ```
 ./mvnw spring-boot:run
 ```
 
 ## Endpoints
 
-Requests can be made to get the following resources:
+Instances can be created, fetched, or deleted for the default model class that is stored in a Docker MySQL volume.
 
-- Stock
-    - OHLCV
-    - Global Quote
-- Stock Time Series Intraday
-    - OHLCV
-    - Adjusted
-    - Including extended hours
-    - Intervals: 1min, 5min, 15min, 30min, 60min
-- Stock Time Series Daily
-    - OHLCV
-    - Not adjusted
-- Stock Time Series Weekly
-    - OHLCV
-    - Adjusted
-- Stock Time Series Monthly
-    - OHLCV
-    - Adjusted
+### Add Model
 
-### Requests
+#### Request
 
-- GET /:
 ```
-curl -i -X GET http://localhost:8080/api/v1/stock/
+curl --location 'localhost:8080/api/v1/model/add-model' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "Test User",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+}'
 ```
 
-- GET /get-global-quote: 
+#### Response
+
 ```
-curl -i -X GET "http://localhost:8080/api/v1/stock/get-global-quote?symbol=nvda"
+{
+    "model": {
+        "id": 1,
+        "name": "Test User",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "createdAt": "2025-01-15T08:20:33.355+00:00"
+    }
+}
 ```
 
-- GET /get-intraday:
+### Get Model
+
+#### Request
+
 ```
-curl -i -X GET "http://localhost:8080/api/v1/stock/get-intraday?symbol=nvda&interval=5min"
+curl --location --request GET 'localhost:8080/api/v1/model/get-model' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "Test User"
+}'
 ```
 
-- GET /get-daily:
+#### Response
+
 ```
-curl -i -X GET "http://localhost:8080/api/v1/stock/get-daily?symbol=nvda"
+{
+    "model": {
+        "id": 1,
+        "name": "Test User",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "createdAt": "2025-01-15T08:20:33.355+00:00"
+    }
+}
 ```
 
-- GET /get-weekly:
+### Delete Model
+
+#### Request
+
 ```
-curl -i -X GET "http://localhost:8080/api/v1/stock/get-weekly?symbol=nvda"
+curl --location --request DELETE 'localhost:8080/api/v1/model/delete-model' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "Test User"
+}'
 ```
 
-- GET /get-monthly:
+#### Response
+
 ```
-curl -i -X GET "http://localhost:8080/api/v1/stock/get-monthly?symbol=nvda"
+{
+    "status": "Model deleted successfully"
+}
 ```
