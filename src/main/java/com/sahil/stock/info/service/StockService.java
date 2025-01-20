@@ -1,6 +1,8 @@
 package com.sahil.stock.info.service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,19 +13,21 @@ import com.sahil.stock.info.util.ApiFunctions;
 
 import jakarta.annotation.PostConstruct;
 
-import com.sahil.stock.info.dto.GetIntradayTsRequest;
-import com.sahil.stock.info.dto.GetIntradayTsResponse;
-import com.sahil.stock.info.dto.GetMonthlyTsRequest;
-import com.sahil.stock.info.dto.GetStockRequest;
-import com.sahil.stock.info.dto.GetStockResponse;
-import com.sahil.stock.info.dto.GetWeeklyTsRequest;
-import com.sahil.stock.info.dto.GetDailyTsApiResponse;
-import com.sahil.stock.info.dto.GetDailyTsRequest;
-import com.sahil.stock.info.dto.GetDailyTsResponse;
-import com.sahil.stock.info.dto.GetIntradayTsApiResponse;
-import com.sahil.stock.info.dto.GetMonthlyTsResponse;
-import com.sahil.stock.info.dto.GetStockApiResponse;
-import com.sahil.stock.info.dto.GetWeeklyTsResponse;
+import com.sahil.stock.info.dto.getDailyTs.GetDailyTsApiResponse;
+import com.sahil.stock.info.dto.getDailyTs.GetDailyTsRequest;
+import com.sahil.stock.info.dto.getDailyTs.GetDailyTsResponse;
+import com.sahil.stock.info.dto.getIntradayTs.GetIntradayTsApiResponse;
+import com.sahil.stock.info.dto.getIntradayTs.GetIntradayTsRequest;
+import com.sahil.stock.info.dto.getIntradayTs.GetIntradayTsResponse;
+import com.sahil.stock.info.dto.getMonthlyTs.GetMonthlyTsApiResponse;
+import com.sahil.stock.info.dto.getMonthlyTs.GetMonthlyTsRequest;
+import com.sahil.stock.info.dto.getMonthlyTs.GetMonthlyTsResponse;
+import com.sahil.stock.info.dto.getStock.GetStockApiResponse;
+import com.sahil.stock.info.dto.getStock.GetStockRequest;
+import com.sahil.stock.info.dto.getStock.GetStockResponse;
+import com.sahil.stock.info.dto.getWeeklyTs.GetWeeklyTsApiResponse;
+import com.sahil.stock.info.dto.getWeeklyTs.GetWeeklyTsRequest;
+import com.sahil.stock.info.dto.getWeeklyTs.GetWeeklyTsResponse;
 
 import reactor.core.publisher.Mono;
 
@@ -70,22 +74,17 @@ public class StockService {
                                         GetStockResponse.GetStockResponseBuilder builder = GetStockResponse
                                                         .builder();
                                         builder.symbol(getStockApiResponse.getStock().getSymbol());
-                                        builder.open(new BigDecimal(getStockApiResponse.getStock().getOpen()));
-                                        builder.high(new BigDecimal(getStockApiResponse.getStock().getHigh()));
-                                        builder.low(new BigDecimal(getStockApiResponse.getStock().getLow()));
-                                        builder.price(new BigDecimal(getStockApiResponse.getStock().getPrice()));
-                                        builder.volume(new BigDecimal(getStockApiResponse.getStock().getVolume()));
+                                        builder.open(getStockApiResponse.getStock().getOpen());
+                                        builder.high(getStockApiResponse.getStock().getHigh());
+                                        builder.low(getStockApiResponse.getStock().getLow());
+                                        builder.price(getStockApiResponse.getStock().getPrice());
+                                        builder.volume(getStockApiResponse.getStock().getVolume());
                                         builder.latestTradingDay(getStockApiResponse.getStock().getLatestTradingDay());
-                                        builder.previousClose(
-                                                        new BigDecimal(
-                                                                        getStockApiResponse.getStock()
-                                                                                        .getPreviousClose()));
-                                        builder.change(new BigDecimal(getStockApiResponse.getStock().getChange()));
-                                        builder.changePercent(
-                                                        new BigDecimal(
-                                                                        getStockApiResponse.getStock()
-                                                                                        .getChangePercent()
-                                                                                        .split("%")[0]));
+                                        builder.previousClose(getStockApiResponse.getStock().getPreviousClose());
+                                        builder.change(getStockApiResponse.getStock().getChange());
+                                        builder.changePercent(new BigDecimal(getStockApiResponse.getStock()
+                                                        .getChangePercent()
+                                                        .split("%")[0]));
 
                                         return builder.build();
                                 });
@@ -112,7 +111,19 @@ public class StockService {
                                 .map((getIntradayTsApiResponse) -> {
                                         GetIntradayTsResponse.GetIntradayTsResponseBuilder builder = GetIntradayTsResponse
                                                         .builder();
-                                        builder.timeSeries(getIntradayTsApiResponse.getTimeSeries());
+                                        Map<String, GetIntradayTsResponse.TimeSeries> timeSeries = new HashMap<>();
+                                        for (Map.Entry<String, GetIntradayTsApiResponse.TimeSeries> entry : getIntradayTsApiResponse
+                                                        .getTimeSeries().entrySet()) {
+                                                GetIntradayTsResponse.TimeSeries data = new GetIntradayTsResponse.TimeSeries();
+                                                data.setOpen(entry.getValue().getOpen());
+                                                data.setHigh(entry.getValue().getHigh());
+                                                data.setLow(entry.getValue().getLow());
+                                                data.setClose(entry.getValue().getClose());
+                                                data.setVolume(entry.getValue().getVolume());
+                                                timeSeries.put(entry.getKey(), data);
+                                        }
+
+                                        builder.timeSeries(timeSeries);
 
                                         return builder.build();
                                 });
@@ -137,7 +148,19 @@ public class StockService {
                                 .map((getDailyTsApiResponse) -> {
                                         GetDailyTsResponse.GetDailyTsResponseBuilder builder = GetDailyTsResponse
                                                         .builder();
-                                        builder.timeSeries(getDailyTsApiResponse.getTimeSeries());
+                                        Map<String, GetDailyTsResponse.TimeSeries> timeSeries = new HashMap<>();
+                                        for (Map.Entry<String, GetDailyTsApiResponse.TimeSeries> entry : getDailyTsApiResponse
+                                                        .getTimeSeries().entrySet()) {
+                                                GetDailyTsResponse.TimeSeries data = new GetDailyTsResponse.TimeSeries();
+                                                data.setOpen(entry.getValue().getOpen());
+                                                data.setHigh(entry.getValue().getHigh());
+                                                data.setLow(entry.getValue().getLow());
+                                                data.setClose(entry.getValue().getClose());
+                                                data.setVolume(entry.getValue().getVolume());
+                                                timeSeries.put(entry.getKey(), data);
+                                        }
+
+                                        builder.timeSeries(timeSeries);
 
                                         return builder.build();
                                 });
@@ -155,8 +178,29 @@ public class StockService {
                                                 .queryParam("apikey", apiKey)
                                                 .build())
                                 .retrieve()
-                                .bodyToMono(GetWeeklyTsResponse.class);
-        }
+                                .bodyToMono(GetWeeklyTsApiResponse.class)
+                                .map((getWeeklyTsApiResponse) -> {
+                                        GetWeeklyTsResponse.GetWeeklyTsResponseBuilder builder = GetWeeklyTsResponse
+                                                        .builder();
+                                        Map<String, GetWeeklyTsResponse.TimeSeries> timeSeries = new HashMap<>();
+                                        for (Map.Entry<String, GetWeeklyTsApiResponse.TimeSeries> entry : getWeeklyTsApiResponse
+                                                        .getTimeSeries().entrySet()) {
+                                                GetWeeklyTsResponse.TimeSeries data = new GetWeeklyTsResponse.TimeSeries();
+                                                data.setOpen(entry.getValue().getOpen());
+                                                data.setHigh(entry.getValue().getHigh());
+                                                data.setLow(entry.getValue().getLow());
+                                                data.setClose(entry.getValue().getClose());
+                                                data.setAdjustedClose(entry.getValue().getAdjustedClose());
+                                                data.setVolume(entry.getValue().getVolume());
+                                                data.setDividendAmount(entry.getValue().getDividendAmount());
+                                                timeSeries.put(entry.getKey(), data);
+                                        }
+
+                                        builder.timeSeries(timeSeries);
+
+                                        return builder.build();
+                                });
+        };
 
         public Mono<GetMonthlyTsResponse> getMonthlyTs(GetMonthlyTsRequest getMonthlyTsRequest) {
                 return webClient.get()
@@ -170,6 +214,27 @@ public class StockService {
                                                 .queryParam("apikey", apiKey)
                                                 .build())
                                 .retrieve()
-                                .bodyToMono(GetMonthlyTsResponse.class);
+                                .bodyToMono(GetMonthlyTsApiResponse.class)
+                                .map((getMonthlyTsApiResponse) -> {
+                                        GetMonthlyTsResponse.GetMonthlyTsResponseBuilder builder = GetMonthlyTsResponse
+                                                        .builder();
+                                        Map<String, GetMonthlyTsResponse.TimeSeries> timeSeries = new HashMap<>();
+                                        for (Map.Entry<String, GetMonthlyTsApiResponse.TimeSeries> entry : getMonthlyTsApiResponse
+                                                        .getTimeSeries().entrySet()) {
+                                                GetMonthlyTsResponse.TimeSeries data = new GetMonthlyTsResponse.TimeSeries();
+                                                data.setOpen(entry.getValue().getOpen());
+                                                data.setHigh(entry.getValue().getHigh());
+                                                data.setLow(entry.getValue().getLow());
+                                                data.setClose(entry.getValue().getClose());
+                                                data.setAdjustedClose(entry.getValue().getAdjustedClose());
+                                                data.setVolume(entry.getValue().getVolume());
+                                                data.setDividendAmount(entry.getValue().getDividendAmount());
+                                                timeSeries.put(entry.getKey(), data);
+                                        }
+
+                                        builder.timeSeries(timeSeries);
+
+                                        return builder.build();
+                                });
         }
 }
