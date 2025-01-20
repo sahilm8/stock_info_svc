@@ -19,6 +19,7 @@ import com.sahil.stock.info.dto.GetStockResponse;
 import com.sahil.stock.info.dto.GetWeeklyTsRequest;
 import com.sahil.stock.info.dto.GetDailyTsRequest;
 import com.sahil.stock.info.dto.GetDailyTsResponse;
+import com.sahil.stock.info.dto.GetIntradayTsApiResponse;
 import com.sahil.stock.info.dto.GetMonthlyTsResponse;
 import com.sahil.stock.info.dto.GetStockApiResponse;
 import com.sahil.stock.info.dto.GetWeeklyTsResponse;
@@ -106,7 +107,14 @@ public class StockService {
                                                 .queryParam("apikey", apiKey)
                                                 .build())
                                 .retrieve()
-                                .bodyToMono(GetIntradayTsResponse.class);
+                                .bodyToMono(GetIntradayTsApiResponse.class)
+                                .map((getIntradayTsApiResponse) -> {
+                                        GetIntradayTsResponse.GetIntradayTsResponseBuilder builder = GetIntradayTsResponse
+                                                        .builder();
+                                        builder.timeSeries(getIntradayTsApiResponse.getTimeSeries());
+
+                                        return builder.build();
+                                });
         }
 
         public Mono<GetDailyTsResponse> getDailyTs(GetDailyTsRequest getDailyTsRequest) {
