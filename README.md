@@ -39,18 +39,23 @@ API to fetch and return stock data. Based on the [Alpha Vantage API](https://www
 
 ## Endpoints
 
-Instances can be created, fetched, or deleted for the default model class that is stored in a Docker MySQL volume.
+Requests can be made to get the following resources:
 
-### Add Model
+- Stock
+- Intraday Time Series (interval: 1min, 5min, 15min, 30min, 60min)
+- Daily Time Series
+- Weekly Time Series
+- Monthly Time Series
+
+### Get Stock
 
 #### Request
 
 ```
-curl --location 'localhost:8080/api/v1/model/add-model' \
+curl --location --request GET 'localhost:8080/api/v1/stock/get-stock' \
 --header 'Content-Type: application/json' \
 --data '{
-    "name": "Test User",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    "symbol": "NVDA"
 }'
 ```
 
@@ -58,56 +63,88 @@ curl --location 'localhost:8080/api/v1/model/add-model' \
 
 ```
 {
-    "model": {
-        "id": 1,
-        "name": "Test User",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        "createdAt": "2025-01-15T08:20:33.355+00:00"
-    }
+    "symbol": "NVDA",
+    "open": 136.6900,
+    "high": 138.5000,
+    "low": 135.4649,
+    "price": 137.7100,
+    "volume": 201188760,
+    "latestTradingDay": "2025-01-17",
+    "previousClose": 133.5700,
+    "change": 4.1400,
+    "changePercent": 3.0995
 }
 ```
 
-### Get Model
+### Get Intraday Time Series
 
 #### Request
 
 ```
-curl --location --request GET 'localhost:8080/api/v1/model/get-model' \
+curl --location --request GET 'localhost:8080/api/v1/stock/get-intraday-ts' \
 --header 'Content-Type: application/json' \
 --data '{
-    "name": "Test User"
+    "symbol": "NVDA",
+    "interval": "60min"
 }'
 ```
 
 #### Response
 
 ```
-{
-    "model": {
-        "id": 1,
-        "name": "Test User",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        "createdAt": "2025-01-15T08:20:33.355+00:00"
-    }
-}
+
 ```
 
-### Delete Model
+### Get Daily Time Series
 
 #### Request
 
 ```
-curl --location --request DELETE 'localhost:8080/api/v1/model/delete-model' \
+curl --location --request GET 'localhost:8080/api/v1/stock/get-daily-ts' \
 --header 'Content-Type: application/json' \
 --data '{
-    "name": "Test User"
+    "symbol": "NVDA"
 }'
 ```
 
 #### Response
 
 ```
-{
-    "status": "Model deleted successfully"
-}
+
+```
+
+### Get Weekly Time Series
+
+#### Request
+
+```
+curl --location --request GET 'localhost:8080/api/v1/stock/get-weekly-ts' \
+--header 'Content-Type: application/json' \
+--data '{
+    "symbol": "NVDA"
+}'
+```
+
+#### Response
+
+```
+
+```
+
+### Get Monthly Time Series
+
+#### Request
+
+```
+curl --location --request GET 'localhost:8080/api/v1/stock/get-monthly-ts' \
+--header 'Content-Type: application/json' \
+--data '{
+    "symbol": "NVDA"
+}'
+```
+
+#### Response
+
+```
+
 ```
