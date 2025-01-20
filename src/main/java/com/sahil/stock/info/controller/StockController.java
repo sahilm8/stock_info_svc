@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sahil.stock.info.dto.GetDailyTsRequest;
-import com.sahil.stock.info.dto.GetDailyTsResponse;
-import com.sahil.stock.info.dto.GetIntradayTsRequest;
-import com.sahil.stock.info.dto.GetIntradayTsResponse;
-import com.sahil.stock.info.dto.GetMonthlyTsRequest;
-import com.sahil.stock.info.dto.GetMonthlyTsResponse;
-import com.sahil.stock.info.dto.GetStockRequest;
-import com.sahil.stock.info.dto.GetStockResponse;
-import com.sahil.stock.info.dto.GetWeeklyTsRequest;
-import com.sahil.stock.info.dto.GetWeeklyTsResponse;
+import com.sahil.stock.info.dto.getDailyTs.GetDailyTsRequest;
+import com.sahil.stock.info.dto.getDailyTs.GetDailyTsResponse;
+import com.sahil.stock.info.dto.getIntradayTs.GetIntradayTsRequest;
+import com.sahil.stock.info.dto.getIntradayTs.GetIntradayTsResponse;
+import com.sahil.stock.info.dto.getMonthlyTs.GetMonthlyTsRequest;
+import com.sahil.stock.info.dto.getMonthlyTs.GetMonthlyTsResponse;
+import com.sahil.stock.info.dto.getStock.GetStockRequest;
+import com.sahil.stock.info.dto.getStock.GetStockResponse;
+import com.sahil.stock.info.dto.getWeeklyTs.GetWeeklyTsRequest;
+import com.sahil.stock.info.dto.getWeeklyTs.GetWeeklyTsResponse;
 import com.sahil.stock.info.service.StockService;
 
 import jakarta.validation.Valid;
