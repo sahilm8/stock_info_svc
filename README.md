@@ -62,18 +62,7 @@ curl --location --request GET 'localhost:8080/api/v1/stock/get-stock' \
 #### Response
 
 ```
-{
-    "symbol": "NVDA",
-    "open": 136.6900,
-    "high": 138.5000,
-    "low": 135.4649,
-    "price": 137.7100,
-    "volume": 201188760,
-    "latestTradingDay": "2025-01-17",
-    "previousClose": 133.5700,
-    "change": 4.1400,
-    "changePercent": 3.0995
-}
+
 ```
 
 ### Get Intraday Time Series
