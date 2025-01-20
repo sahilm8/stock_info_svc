@@ -1,5 +1,7 @@
 package com.sahil.stock.info.service;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -18,6 +20,7 @@ import com.sahil.stock.info.dto.GetWeeklyTsRequest;
 import com.sahil.stock.info.dto.GetDailyTsRequest;
 import com.sahil.stock.info.dto.GetDailyTsResponse;
 import com.sahil.stock.info.dto.GetMonthlyTsResponse;
+import com.sahil.stock.info.dto.GetStockApiResponse;
 import com.sahil.stock.info.dto.GetWeeklyTsResponse;
 
 import reactor.core.publisher.Mono;
@@ -60,7 +63,30 @@ public class StockService {
                                                 .queryParam("apikey", apiKey)
                                                 .build())
                                 .retrieve()
-                                .bodyToMono(GetStockResponse.class);
+                                .bodyToMono(GetStockApiResponse.class)
+                                .map((getStockApiResponse) -> {
+                                        GetStockResponse.GetStockResponseBuilder builder = GetStockResponse
+                                                        .builder();
+                                        builder.symbol(getStockApiResponse.getStock().getSymbol());
+                                        builder.open(new BigDecimal(getStockApiResponse.getStock().getOpen()));
+                                        builder.high(new BigDecimal(getStockApiResponse.getStock().getHigh()));
+                                        builder.low(new BigDecimal(getStockApiResponse.getStock().getLow()));
+                                        builder.price(new BigDecimal(getStockApiResponse.getStock().getPrice()));
+                                        builder.volume(new BigDecimal(getStockApiResponse.getStock().getVolume()));
+                                        builder.latestTradingDay(getStockApiResponse.getStock().getLatestTradingDay());
+                                        builder.previousClose(
+                                                        new BigDecimal(
+                                                                        getStockApiResponse.getStock()
+                                                                                        .getPreviousClose()));
+                                        builder.change(new BigDecimal(getStockApiResponse.getStock().getChange()));
+                                        builder.changePercent(
+                                                        new BigDecimal(
+                                                                        getStockApiResponse.getStock()
+                                                                                        .getChangePercent()
+                                                                                        .split("%")[0]));
+
+                                        return builder.build();
+                                });
         }
 
         public Mono<GetIntradayTsResponse> getIntradayTs(GetIntradayTsRequest getIntradayTsRequest) {
