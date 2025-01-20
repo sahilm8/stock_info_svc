@@ -1,6 +1,5 @@
 package com.sahil.stock.info.dto;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -62,23 +61,5 @@ public class GetIntradayTsApiResponse {
             "Time Series (30min)",
             "Time Series (60min)"
     })
-    private Map<String, TimeSeries> timeSeries;
-
-    @Data
-    public static class TimeSeries {
-        @JsonProperty("1. open")
-        private BigDecimal open;
-
-        @JsonProperty("2. high")
-        private BigDecimal high;
-
-        @JsonProperty("3. low")
-        private BigDecimal low;
-
-        @JsonProperty("4. close")
-        private BigDecimal close;
-
-        @JsonProperty("5. volume")
-        private BigDecimal volume;
-    }
+    private Map<String, TimeSeriesShort> timeSeries;
 }
