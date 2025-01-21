@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/v1/stock")
+@RequestMapping("/api/v2/stock")
 @RequiredArgsConstructor
 @Validated
 public class StockController {
