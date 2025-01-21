@@ -52,7 +52,7 @@ Requests can be made to perform the following actions:
 #### Request
 
 ```
-curl --location --request GET 'localhost:8080/api/v1/stock/get-stock' \
+curl --location --request GET 'localhost:8080/api/v2/stock/get-stock' \
 --header 'Content-Type: application/json' \
 --data '{
     "symbol": "NVDA"
@@ -81,7 +81,7 @@ curl --location --request GET 'localhost:8080/api/v1/stock/get-stock' \
 #### Request
 
 ```
-curl --location --request GET 'localhost:8080/api/v1/stock/get-intraday-ts' \
+curl --location --request GET 'localhost:8080/api/v2/stock/get-intraday-ts' \
 --header 'Content-Type: application/json' \
 --data '{
     "symbol": "NVDA",
@@ -125,7 +125,7 @@ curl --location --request GET 'localhost:8080/api/v1/stock/get-intraday-ts' \
 #### Request
 
 ```
-curl --location --request GET 'localhost:8080/api/v1/stock/get-daily-ts' \
+curl --location --request GET 'localhost:8080/api/v2/stock/get-daily-ts' \
 --header 'Content-Type: application/json' \
 --data '{
     "symbol": "NVDA"
@@ -168,7 +168,7 @@ curl --location --request GET 'localhost:8080/api/v1/stock/get-daily-ts' \
 #### Request
 
 ```
-curl --location --request GET 'localhost:8080/api/v1/stock/get-weekly-ts' \
+curl --location --request GET 'localhost:8080/api/v2/stock/get-weekly-ts' \
 --header 'Content-Type: application/json' \
 --data '{
     "symbol": "NVDA"
@@ -217,7 +217,7 @@ curl --location --request GET 'localhost:8080/api/v1/stock/get-weekly-ts' \
 #### Request
 
 ```
-curl --location --request GET 'localhost:8080/api/v1/stock/get-monthly-ts' \
+curl --location --request GET 'localhost:8080/api/v2/stock/get-monthly-ts' \
 --header 'Content-Type: application/json' \
 --data '{
     "symbol": "NVDA"
